@@ -33,7 +33,8 @@ git clone --recurse-submodules -j8 https://github.com/Retiefasaurus/MercuryDPM2J
 cd MercuryDPM2JAX
 
 # Build & install
-uv pip install -e . --verbose
+uv build
+uv sync
 
 
 uv run test/test_ffi.py
