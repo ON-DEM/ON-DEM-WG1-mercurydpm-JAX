@@ -21,7 +21,7 @@ Accelerate ML training pipelines by:
 ### Core Dependencies
 - [MercuryDPM](https://www.mercurydpm.org) (custom branch, feature/2JAX)
 - Python 3.9+
-- [JAX](https://github.com/google/jax) (with GPU/TPU support recommended)
+- [JAX](https://github.com/google/jax) (CPU)
 - [Nanobind](https://github.com/wjakob/nanobind) (C++/Python binding)
 - [scikit-build](https://scikit-build.readthedocs.io/)
 
