@@ -1,4 +1,4 @@
-# MercuryDPM2JAX
+# MercuryDPM to JAX example
 
 An example interface between MercuryDPM (Discrete Element Method engine) and JAX's XLA for machine learning applications
 
