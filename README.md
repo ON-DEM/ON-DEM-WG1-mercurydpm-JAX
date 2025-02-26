@@ -12,7 +12,7 @@ Accelerate ML training pipelines by:
 - Providing a stateful foreign function interface (FFI) for [JAX/XLA](https://docs.jax.dev/en/latest/ffi.html)
 - Packaging [MercuryDPM](https://bitbucket.org/mercurydpm/mercurydpm/src/master/) as a native Python extension via [nanobind](https://github.com/wjakob/nanobind)
 
-**Key contribution** How to compile MercuryDPM into a shared library accessible in Python/JAX ecosystems while maintaining stateful DEM simulations. 
+**Key contribution** Compile MercuryDPM into a shared library accessible in Python/JAX ecosystems while maintaining stateful DEM simulations. 
 
 ## 📋 Requirements
 - [uv](https://github.com/astral-sh/uv) (Blazing-fast Python package manager)
@@ -32,24 +32,53 @@ Accelerate ML training pipelines by:
 git clone --recurse-submodules -j8 https://github.com/Retiefasaurus/MercuryDPM2JAX.git
 cd MercuryDPM2JAX
 
-# Build & install
+# Build mercury into a shared library
 uv build
+
+# update site-packages
 uv sync
 
-
+# run code
 uv run test/test_ffi.py
 
 ```
-Interface is found in `test/test_ffi.py` and `mercurydpm/Drivers/2JAX/mdpm_jax.cpp`
-
 ## How we modify Mercury DPM ?
 To interface MercuryDPM with JAX, we make the following modifications:
-- Interface: The interface is found in the mercurydpm/Drivers/2JAX/mdpm_jax.cpp file.
-- Driver CMakefile: The mercurydpm/Drivers/2JAX/CMakeLists.txt file specifies nanobind and installs the shared library.
-- Modified CMakeLists.txt: The mercurydpm/CMakeLists.txt file is modified to include XLA and nanobind.
-- Modified Kernel CMakeLists.txt: The mercurydpm/Kernel/CMakeLists.txt file is modified to compile with -fPIC.
+- The interface is found in the `mercurydpm/Drivers/2JAX/mdpm_jax.cpp` file.
+- Driver CMakefile: The `mercurydpm/Drivers/2JAX/CMakeLists.txt` file specifies nanobind and installs the shared library.
+- Modified CMakeLists.txt: The `mercurydpm/CMakeLists.txt` file is modified to include XLA and nanobind.
+- Modified Kernel CMakeLists.txt: The `mercurydpm/Kernel/CMakeLists.txt` file is modified to compile with -fPIC.
 - Commented out unused driver scripts: Unused driver scripts are commented out to avoid conflicts.
 
+## Code
+Example of interfaced code
+```python
+from mercurydpm2jax import mdpm_jax
+
+import jax
+import jax.numpy as jnp
+
+jax.config.update("jax_platform_name", "cpu")
+
+for name, target in mdpm_jax.registrations().items():
+    jax.ffi.register_ffi_target(name, target)
+
+
+@jax.jit
+def run_dpm():
+    num_particles = 2
+    dim = 3
+
+    # call MDPM, returns flattened array (x0,y0,z0,x1,y1,z1)
+    out_type = jax.ShapeDtypeStruct((num_particles * dim,), jax.numpy.float32)
+    positions = jax.ffi.ffi_call("run_dpm", out_type)()
+    return positions.reshape(-1, 3)  # rehape
+
+
+for i in range(10000):
+    k = run_dpm()
+    print(k)
+```
 
 ## Repo
 
