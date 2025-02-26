@@ -32,6 +32,9 @@ Accelerate ML training pipelines by:
 git clone --recurse-submodules -j8 https://github.com/Retiefasaurus/MercuryDPM2JAX.git
 cd MercuryDPM2JAX
 
+# make sure submodule is in JAX interface branch
+cd mercurydpm; git checkout feature/JAX_interface; cd ..
+
 # Build mercury into a shared library
 uv build
 
