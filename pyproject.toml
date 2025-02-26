@@ -9,8 +9,7 @@ authors = [
 requires-python = ">=3.11"
 
 dependencies = [
-    "jax[cuda]>=0.4.30",
-    "jaxtyping>=0.2.36",
+    "jax>=0.5.1",
     "numpy>=2.0.2",
 ]
 
@@ -19,9 +18,14 @@ dev = ["nanobind>=2.5.0","scikit-build>=0.18.1"]
 
 
 [tool.scikit-build]
+cmake.source-dir = "mercurydpm" # change location of ${CMAKE_SOURCE_DIR}
 minimum-version = "build-system.requires"
 build-dir = "build/{wheel_tag}"
+editable.mode = "redirect" # needed?
 
 [build-system]
-requires = ["scikit-build-core", "nanobind","jax"]
+requires = ["scikit-build-core>=0.10", "nanobind","jax"]
 build-backend = "scikit_build_core.build"
+
+
+
