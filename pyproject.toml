@@ -1,0 +1,27 @@
+[project]
+name = "mercurydpm2jax"
+version = "0.1.0"
+description = "Example project on how to couple MercuryDPM with JAX"
+readme = "README.md"
+authors = [
+    { name = "Retief", email = "retieflubbe@outlook.com" }
+]
+requires-python = ">=3.11"
+
+dependencies = [
+    "jax[cuda]>=0.4.30",
+    "jaxtyping>=0.2.36",
+    "numpy>=2.0.2",
+]
+
+[dependency-groups]
+dev = ["nanobind>=2.5.0","scikit-build>=0.18.1"]
+
+
+[tool.scikit-build]
+minimum-version = "build-system.requires"
+build-dir = "build/{wheel_tag}"
+
+[build-system]
+requires = ["scikit-build-core", "nanobind","jax"]
+build-backend = "scikit_build_core.build"
