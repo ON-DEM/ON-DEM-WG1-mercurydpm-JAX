@@ -1,0 +1,4 @@
+[submodule "mercurydpm"]
+	path = mercurydpm
+	url = https://rlubbe@bitbucket.org/mercurydpm/mercurydpm.git
+	branch = feature/JAX_interface

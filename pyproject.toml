@@ -1,0 +1,31 @@
+[project]
+name = "mercurydpm2jax"
+version = "0.1.0"
+description = "Example project on how to couple MercuryDPM with JAX"
+readme = "README.md"
+authors = [
+    { name = "Retief", email = "retieflubbe@outlook.com" }
+]
+requires-python = ">=3.11"
+
+dependencies = [
+    "jax>=0.5.1",
+    "numpy>=2.0.2",
+]
+
+[dependency-groups]
+dev = ["nanobind>=2.5.0","scikit-build>=0.18.1"]
+
+
+[tool.scikit-build]
+cmake.source-dir = "mercurydpm" # change location of ${CMAKE_SOURCE_DIR}
+minimum-version = "build-system.requires"
+build-dir = "build/{wheel_tag}"
+editable.mode = "redirect" # needed?
+
+[build-system]
+requires = ["scikit-build-core>=0.10", "nanobind","jax"]
+build-backend = "scikit_build_core.build"
+
+
+
